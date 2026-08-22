@@ -3,7 +3,7 @@ import { Award, BookOpen, CheckCircle2, ClipboardCheck, GraduationCap, ShieldChe
 import { Badge } from '@/components/ui/badge.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { canIssueCertificate, deriveCourseProgress, nextLearningAction } from '../lib/learningProgress.js'
+import { canIssueCertificate, createCertificatePreview, deriveCourseProgress, nextLearningAction } from '../lib/learningProgress.js'
 
 const courseLessons = [
   { id: 'letters', title: 'الحروف ومخارجها', duration: '18 دقيقة' },
@@ -21,6 +21,7 @@ export default function LearningProgressDashboard() {
   const [completedLessonIds, setCompletedLessonIds] = useState(['letters'])
   const [assessmentScore, setAssessmentScore] = useState(62)
   const [activeRole, setActiveRole] = useState('student')
+  const [certificate, setCertificate] = useState(null)
 
   const progress = useMemo(
     () => deriveCourseProgress(courseLessons, completedLessonIds, assessmentScore),
@@ -28,11 +29,22 @@ export default function LearningProgressDashboard() {
   )
   const certificateEligible = canIssueCertificate(progress)
   const selectedRole = roles.find((role) => role.id === activeRole)
+  const roleMessage = activeRole === 'teacher'
+    ? (progress.assessmentPassed ? `الطالب اجتاز التقييم، ويتبقى ${progress.totalLessons - progress.completedLessons} درس للمراجعة.` : 'أولوية المتابعة: مراجعة التقييم قبل اعتماد الإتمام.')
+    : activeRole === 'admin'
+      ? `سياسة العرض الحالية: ${progress.totalLessons} دروس مكتملة ودرجة 70% على الأقل قبل إنشاء المعاينة.`
+      : nextLearningAction(progress)
 
   function toggleLesson(lessonId) {
+    setCertificate(null)
     setCompletedLessonIds((current) =>
       current.includes(lessonId) ? current.filter((id) => id !== lessonId) : [...current, lessonId],
     )
+  }
+
+  function issueCertificate() {
+    const preview = createCertificatePreview(progress, { learnerName: 'الطالب التجريبي', courseTitle: 'أساسيات اللغة العربية', issuedAt: '2026-08-23T00:00:00.000Z' })
+    setCertificate(preview)
   }
 
   return (
@@ -57,7 +69,7 @@ export default function LearningProgressDashboard() {
           <Card className="border-emerald-100 shadow-sm bg-white/90 mb-7">
             <CardContent className="p-6 flex gap-4 items-start">
               <selectedRole.icon className="w-6 h-6 text-emerald-700 mt-0.5 shrink-0" />
-              <div><p className="font-bold text-slate-900">عرض {selectedRole.label}</p><p className="text-slate-600 mt-1">{selectedRole.detail}</p></div>
+              <div><p className="font-bold text-slate-900">عرض {selectedRole.label}</p><p className="text-slate-600 mt-1">{selectedRole.detail}</p><p className="text-sm font-bold text-emerald-800 mt-3">قرار الدور الحالي: {roleMessage}</p></div>
             </CardContent>
           </Card>
 
@@ -80,7 +92,7 @@ export default function LearningProgressDashboard() {
             <div className="space-y-7">
               <Card className="border-amber-100 shadow-sm bg-white/90"><CardContent className="p-6"><p className="text-sm font-bold text-slate-500">تقدّم الدروس</p><p className="text-5xl font-black text-slate-900 mt-3">{progress.lessonPercent}<span className="text-xl text-slate-400">%</span></p><div className="h-3 rounded-full bg-slate-100 mt-5 overflow-hidden"><div className="h-full bg-gradient-to-l from-emerald-700 to-emerald-400 transition-all" style={{ width: `${progress.lessonPercent}%` }} /></div><p className="text-sm text-slate-600 mt-4">{progress.completedLessons} من {progress.totalLessons} دروس مكتملة</p></CardContent></Card>
               <Card className="border-amber-100 shadow-sm bg-white/90"><CardContent className="p-6"><div className="flex justify-between items-center gap-3"><div><p className="text-sm font-bold text-slate-500">التقييم النهائي</p><p className="text-3xl font-black text-slate-900 mt-2">{assessmentScore}<span className="text-base text-slate-400"> / 100</span></p></div><ClipboardCheck className="w-8 h-8 text-amber-600" /></div><input aria-label="درجة التقييم النهائي" type="range" min="0" max="100" value={assessmentScore} onChange={(event) => setAssessmentScore(Number(event.target.value))} className="w-full mt-5 accent-emerald-700" /><p className={`text-sm mt-3 font-semibold ${progress.assessmentPassed ? 'text-emerald-700' : 'text-amber-700'}`}>{progress.assessmentPassed ? 'اجتاز معيار التقييم.' : 'يتطلب 70% على الأقل لاجتياز التقييم.'}</p></CardContent></Card>
-              <Card className={`shadow-sm ${certificateEligible ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white'}`}><CardContent className="p-6"><Award className={`w-8 h-8 ${certificateEligible ? 'text-emerald-700' : 'text-slate-400'}`} /><p className="font-black text-lg text-slate-900 mt-3">{nextLearningAction(progress)}</p><p className="text-sm text-slate-600 mt-2">{certificateEligible ? 'تستوفي الدروس والتقييم شروط إصدار شهادة الإتمام.' : 'تصدر الشهادة فقط بعد استكمال جميع الدروس واجتياز التقييم.'}</p><Button disabled={!certificateEligible} className="w-full mt-5 bg-emerald-700 hover:bg-emerald-800">إصدار شهادة تجريبية</Button></CardContent></Card>
+              <Card className={`shadow-sm ${certificateEligible ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white'}`}><CardContent className="p-6"><Award className={`w-8 h-8 ${certificateEligible ? 'text-emerald-700' : 'text-slate-400'}`} /><p className="font-black text-lg text-slate-900 mt-3">{nextLearningAction(progress)}</p><p className="text-sm text-slate-600 mt-2">{certificateEligible ? 'تستوفي الدروس والتقييم شروط إصدار معاينة شهادة الإتمام.' : 'تُنشأ المعاينة فقط بعد استكمال جميع الدروس واجتياز التقييم.'}</p><Button disabled={!certificateEligible} onClick={issueCertificate} className="w-full mt-5 bg-emerald-700 hover:bg-emerald-800">إصدار معاينة شهادة</Button>{certificate && <div className="mt-4 rounded-xl border border-emerald-200 bg-white p-4 text-sm"><p className="font-bold text-emerald-800">تم إنشاء معاينة الشهادة</p><p className="mt-2 text-slate-700">{certificate.learnerName} · {certificate.courseTitle}</p><p className="font-mono text-xs text-slate-500 mt-1">{certificate.reference}</p><p className="text-xs text-amber-800 mt-3">{certificate.disclaimer}</p></div>}</CardContent></Card>
             </div>
           </div>
         </div>

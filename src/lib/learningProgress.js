@@ -23,3 +23,15 @@ export function nextLearningAction(progress) {
   if (!progress.assessmentPassed) return "أعد التقييم النهائي"
   return "حمّل شهادة الإتمام"
 }
+
+export function createCertificatePreview(progress, { learnerName, courseTitle, issuedAt }) {
+  if (!canIssueCertificate(progress)) return null
+  const datePart = new Date(issuedAt).toISOString().slice(0, 10).replaceAll("-", "")
+  return {
+    reference: `DEMO-AR-${datePart}-${progress.completedLessons}`,
+    learnerName,
+    courseTitle,
+    issuedAt,
+    disclaimer: "وثيقة عرض تفاعلية وليست شهادة أكاديمية صادرة أو قابلة للتحقق خارج هذا النموذج.",
+  }
+}
