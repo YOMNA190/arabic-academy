@@ -1,21 +1,22 @@
 # Arabic Academy
 
-An educational web experience that presents Arabic learning content through an engaging, responsive, and accessible interface.
+واجهة تعليمية عربية أولاً تستعرض رحلة تعلم منظمة، من الدرس والتقدّم إلى التقييم وأهلية إصدار الشهادة.
 
 ## Overview
 
-An interactive Arabic-language learning platform built with React, Vite, JavaScript, and modern UI components.
+مشروع واجهة منتج تفاعلي مبني بـReact وVite وJavaScript. يركّز على تجربة تعلم RTL منظمة وقابلة للفهم، مع عرض صريح للحدود الحالية بدلاً من ادعاء تشغيل إنتاجي أو بيانات طلاب حقيقية.
 
 ## Highlights
 
-- Interactive learning experience
-- Responsive educational UI
-- Arabic-first content direction
-- Fast Vite development workflow
+- **لوحة تقدّم طالب تفاعلية:** استكمال الدروس، نسبة التقدّم، والخطوة التالية.
+- **محرك تقدّم قابل للاختبار:** يحتسب الاستكمال، حالة المسار، اجتياز التقييم، وأهلية الشهادة.
+- **تجربة أدوار:** حالات عرض للطالب والمدرّس والإدارة توضّح مسؤولية كل دور في دورة التعلم.
+- **واجهة عربية RTL متجاوبة** مع حالات واضحة للوصول إلى الهدف التالي.
+- **سلامة المحتوى:** لا توجد تقييمات أو شهادات أو أرقام مستخدمين مختلقة؛ لوحة التقدّم تستخدم بيانات عرض فقط.
 
 ## Tech stack
 
-React, JavaScript, Vite, Tailwind CSS, ESLint
+React, JavaScript, Vite, Tailwind CSS, Framer Motion, ESLint, Node test runner
 
 ## Getting started
 
@@ -38,7 +39,21 @@ npm run preview
 | `dev` | `vite` |
 | `build` | `vite build` |
 | `lint` | `eslint .` |
+| `test` | `node --test` |
 | `preview` | `vite preview` |
+
+## Learning operations case study
+
+تجسّد لوحة التقدّم منطقاً محدوداً لكن فعلياً داخل المتصفح:
+
+| قرار المنتج | التنفيذ الحالي | معيار التحقق |
+|---|---|---|
+| متى يعد المسار مكتملًا؟ | اكتمال جميع الدروس واجتياز التقييم بدرجة 70% أو أعلى | اختبار `canIssueCertificate` |
+| ما هي الخطوة التالية؟ | يحددها المحرك بحسب حالة الدروس ونتيجة التقييم | اختبار `nextLearningAction` |
+| من يرى ماذا؟ | حالات واجهة للطالب والمدرّس والإدارة ضمن لوحة واحدة | أزرار أدوار تفاعلية |
+| هل تصدر شهادة حقيقية؟ | لا؛ الزر تجريبي ولا ينشئ وثيقة أو سجلاً دائماً | الحالة موضحة داخل الواجهة |
+
+> **حدود المشروع الحالية:** هذه ليست منصة LMS متصلة بقاعدة بيانات أو نظام دخول أو سجل شهادات. وهي دراسة منتج front-end توثق دورة تقدّم قابلة للاختبار، ويمكن توسيعها لاحقاً بخدمات حسابات، محتوى، ومحاولات تقييم محفوظة.
 
 ## Project structure
 
@@ -50,7 +65,7 @@ Do not commit credentials or production secrets. Copy the example environment fi
 
 ## Status
 
-This repository is maintained as part of Yomna Ali's professional web portfolio. Production status and live URLs should be documented here when finalized.
+هذا المستودع جزء من بورتفوليو Yomna Ali. آخر تحقق محلي موثق: `npm run lint` (دون أخطاء، مع تحذيرات Fast Refresh من مكونات واجهة مولدة)، و`npm test` (اختباران ناجحان)، و`npm run build` ناجح.
 
 ## Author
 

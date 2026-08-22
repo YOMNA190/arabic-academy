@@ -13,6 +13,7 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
   const navItems = [
     { id: 'home', label: 'الرئيسية' },
     { id: 'courses', label: 'الدورات' },
+    { id: 'progress', label: 'لوحة التقدّم' },
     { id: 'about', label: 'عن الأكاديمية' },
     { id: 'contact', label: 'تواصل معنا' }
   ]
@@ -73,8 +74,8 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Button variant="outline" className="border-amber-300 text-amber-700 hover:bg-amber-50">
-              تسجيل الدخول
+            <Button variant="outline" className="border-amber-300 text-amber-700 hover:bg-amber-50" onClick={() => handleNavClick('progress')}>
+              لوحة التقدّم
             </Button>
             <Button className="bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white shadow-lg">
               ابدأ التعلم
@@ -111,8 +112,8 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
                 </button>
               ))}
               <div className="flex flex-col space-y-2 mt-4">
-                <Button variant="outline" className="border-amber-300 text-amber-700 hover:bg-amber-50">
-                  تسجيل الدخول
+                <Button variant="outline" className="border-amber-300 text-amber-700 hover:bg-amber-50" onClick={() => handleNavClick('progress')}>
+                  لوحة التقدّم
                 </Button>
                 <Button className="bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white shadow-lg">
                   ابدأ التعلم
@@ -127,4 +128,3 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
 }
 
 export default Navigation
-

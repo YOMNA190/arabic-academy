@@ -7,6 +7,7 @@ import Navigation from './components/Navigation.jsx'
 import Courses from './components/Courses.jsx'
 import About from './components/About.jsx'
 import Contact from './components/Contact.jsx'
+import LearningProgressDashboard from './components/LearningProgressDashboard.jsx'
 import { 
   BookOpen, 
   Users, 
@@ -127,6 +128,7 @@ function App() {
                 <Button 
                   size="lg" 
                   className="bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white shadow-xl px-8 py-4 text-lg"
+                  onClick={() => setCurrentPage('progress')}
                 >
                   <Play className="w-5 h-5 mr-2" />
                   ابدأ رحلتك الآن
@@ -358,6 +360,7 @@ function App() {
               <ul className="space-y-2 text-gray-400">
                 <li><button onClick={() => setCurrentPage('home')} className="hover:text-amber-400 transition-colors">الرئيسية</button></li>
                 <li><button onClick={() => setCurrentPage('courses')} className="hover:text-amber-400 transition-colors">الدورات</button></li>
+                <li><button onClick={() => setCurrentPage('progress')} className="hover:text-amber-400 transition-colors">لوحة التقدّم</button></li>
                 <li><button onClick={() => setCurrentPage('about')} className="hover:text-amber-400 transition-colors">عن الأكاديمية</button></li>
                 <li><button onClick={() => setCurrentPage('contact')} className="hover:text-amber-400 transition-colors">تواصل معنا</button></li>
               </ul>
@@ -395,6 +398,8 @@ function App() {
     switch (currentPage) {
       case 'courses':
         return <Courses />
+      case 'progress':
+        return <LearningProgressDashboard />
       case 'about':
         return <About />
       case 'contact':

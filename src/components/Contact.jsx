@@ -293,7 +293,7 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    {socialLinks.map((social, index) => (
+                    {socialLinks.map((social) => (
                       <motion.button
                         key={social.name}
                         whileHover={{ scale: 1.05 }}
@@ -360,4 +360,3 @@ const Contact = () => {
 }
 
 export default Contact
-
