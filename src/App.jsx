@@ -11,7 +11,6 @@ import {
   BookOpen, 
   Users, 
   Award, 
-  Star, 
   Play, 
   ChevronRight, 
   Globe, 
@@ -25,15 +24,10 @@ import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
-    }, 4000)
-    return () => clearInterval(interval)
   }, [])
 
   const courses = [
@@ -42,8 +36,7 @@ function App() {
       description: "تعلم الحروف والكلمات الأساسية بطريقة تفاعلية ممتعة",
       level: "مبتدئ",
       duration: "8 أسابيع",
-      students: 1250,
-      rating: 4.9,
+      learningModel: "دروس قصيرة وتمارين تطبيقية",
       image: "/src/assets/arabic-calligraphy.jpg"
     },
     {
@@ -51,8 +44,7 @@ function App() {
       description: "إتقان قواعد النحو والصرف العربي بأسلوب مبسط",
       level: "متوسط",
       duration: "12 أسبوع",
-      students: 890,
-      rating: 4.8,
+      learningModel: "شرح مبسّط وتطبيقات تدريجية",
       image: "/src/assets/geometric-pattern.jpg"
     },
     {
@@ -60,38 +52,16 @@ function App() {
       description: "استكشاف جمال البلاغة العربية والأدب الكلاسيكي",
       level: "متقدم",
       duration: "16 أسبوع",
-      students: 650,
-      rating: 4.9,
+      learningModel: "قراءة وتحليل ومناقشات موجهة",
       image: "/src/assets/islamic-pattern.jpg"
     }
   ]
 
-  const testimonials = [
-    {
-      name: "أحمد محمد",
-      role: "طالب جامعي",
-      content: "الأكاديمية العربية غيرت نظرتي للغة العربية. التعلم أصبح ممتعاً وسهلاً!",
-      rating: 5
-    },
-    {
-      name: "فاطمة علي",
-      role: "معلمة",
-      content: "منصة رائعة تجمع بين الأصالة والحداثة في تعليم اللغة العربية.",
-      rating: 5
-    },
-    {
-      name: "عمر حسن",
-      role: "مهندس",
-      content: "استطعت تحسين مهاراتي في اللغة العربية بفضل المحتوى المتميز.",
-      rating: 5
-    }
-  ]
-
-  const stats = [
-    { icon: Users, value: "10,000+", label: "طالب نشط" },
-    { icon: BookOpen, value: "50+", label: "دورة تعليمية" },
-    { icon: Award, value: "95%", label: "معدل النجاح" },
-    { icon: Globe, value: "25+", label: "دولة" }
+  const capabilities = [
+    { icon: Users, value: "أدوار متعددة", label: "طالب، مدرّس، وإدارة" },
+    { icon: BookOpen, value: "مسارات منظمة", label: "من المبتدئ إلى المتقدم" },
+    { icon: Award, value: "تقدم واضح", label: "مهام وتقييمات قابلة للمتابعة" },
+    { icon: Globe, value: "Arabic-first", label: "تجربة RTL قابلة للوصول" }
   ]
 
   const HomePage = () => (
@@ -179,7 +149,7 @@ function App() {
                 transition={{ delay: 1.1 }}
                 className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-8"
               >
-                {stats.map((stat, index) => (
+                {capabilities.map((stat, index) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -314,19 +284,11 @@ function App() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <span>المدة: {course.duration}</span>
-                        <span>{course.students} طالب</span>
+                        <span>{course.learningModel}</span>
                       </div>
                       
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-4 h-4 ${i < Math.floor(course.rating) ? 'text-amber-400 fill-current' : 'text-gray-300'}`} 
-                            />
-                          ))}
-                          <span className="text-sm text-gray-600 mr-2">{course.rating}</span>
-                        </div>
+                        <span className="text-sm text-gray-600">منهج تدريجي</span>
                         
                         <Button 
                           size="sm" 
@@ -362,72 +324,15 @@ function App() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="py-20 bg-gradient-to-br from-amber-50 to-emerald-50">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-gradient-to-r from-amber-500 to-emerald-600 text-white px-4 py-2 mb-4">
-              <Heart className="w-4 h-4 mr-2" />
-              آراء طلابنا
-            </Badge>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-              قصص نجاح ملهمة
-            </h2>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center mb-12">
+            <Badge className="bg-gradient-to-r from-amber-500 to-emerald-600 text-white px-4 py-2 mb-4"><Heart className="w-4 h-4 mr-2" />نموذج رحلة التعلّم</Badge>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">من الدرس إلى التقدّم القابل للمتابعة</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">هذه الواجهة تعرض بنية المنتج المقترحة، وليست ادعاءً بنتائج أو آراء طلاب حقيقية.</p>
           </motion.div>
-
-          <div className="max-w-4xl mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTestimonial}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
-                className="text-center"
-              >
-                <Card className="bg-white/80 backdrop-blur-sm border-amber-200/50 shadow-xl p-8">
-                  <CardContent className="space-y-6">
-                    <div className="flex justify-center space-x-1 mb-4">
-                      {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                        <Star key={i} className="w-6 h-6 text-amber-400 fill-current" />
-                      ))}
-                    </div>
-                    
-                    <blockquote className="text-xl lg:text-2xl text-gray-700 leading-relaxed italic">
-                      "{testimonials[currentTestimonial].content}"
-                    </blockquote>
-                    
-                    <div className="pt-4">
-                      <div className="font-bold text-gray-800 text-lg">
-                        {testimonials[currentTestimonial].name}
-                      </div>
-                      <div className="text-gray-600">
-                        {testimonials[currentTestimonial].role}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </AnimatePresence>
-            
-            <div className="flex justify-center space-x-2 mt-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial 
-                      ? 'bg-gradient-to-r from-amber-500 to-emerald-600 scale-125' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[['01', 'مسار واضح', 'دروس مرتبة حسب المستوى مع نقطة بداية مناسبة لكل متعلم.'], ['02', 'تطبيق وتقييم', 'تمارين قصيرة واختبارات تساعد على قياس التقدم خلال المسار.'], ['03', 'لوحات أدوار', 'واجهة طالب ومدرس وإدارة لتتبع المحتوى والتقدم والمهام.']].map(([number, title, text]) => <Card key={number} className="bg-white/80 backdrop-blur-sm border-amber-200/50 shadow-lg p-6"><CardContent className="p-0"><span className="text-amber-600 font-black">{number}</span><h3 className="text-xl font-bold text-gray-800 mt-4">{title}</h3><p className="text-gray-600 leading-relaxed mt-3">{text}</p></CardContent></Card>)}
           </div>
         </div>
       </section>
@@ -518,4 +423,3 @@ function App() {
 }
 
 export default App
-
